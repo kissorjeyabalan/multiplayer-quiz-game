@@ -1,8 +1,6 @@
 const Quiz = require('../quizes');
 const games = [];
 
-
-
 function getAllAvailableGames() {
     return games.filter((game) => {
         return game.started === false;

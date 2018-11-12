@@ -1,7 +1,7 @@
 /*
-* Partially taken from
-* https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/src/server/db/users.js
-* */
+Based on
+https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/src/server/db/users.js
+ */
 
 const users = new Map();
 

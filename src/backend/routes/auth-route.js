@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /*
-Partially taken from
+Based on
 https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/src/server/routes/authApi.js
  */
 const passport = require('passport');

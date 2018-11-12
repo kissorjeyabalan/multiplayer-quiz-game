@@ -10,6 +10,10 @@ const start = (server) => {
 
     io.on('connection', (socket) => {
         console.info(`Created socket with ID ${socket.id}`);
+
+        /*
+        WebSocket login taken from https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/src/server/ws/ws_handler.js
+         */
         socket.on('login', (data) => {
            if (data === null || data === undefined) {
                socket.emit('error', {error: 'No payload received!'});
