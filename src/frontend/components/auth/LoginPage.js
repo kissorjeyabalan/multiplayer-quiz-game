@@ -14,6 +14,13 @@ class LoginPage extends React.Component {
         }
         this.onUserIdChange = this.onUserIdChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.login = this.login.bind(this);
+    }
+
+    componentDidUpdate() {
+        if (this.props.authenticated) {
+            this.props.history.push('/');
+        }
     }
 
     onUserIdChange(event) {
@@ -22,6 +29,13 @@ class LoginPage extends React.Component {
 
     onPasswordChange(event) {
         this.setState({password: event.target.value});
+    }
+
+    login() {
+        if (this.props.authenticated) {
+            this.props.history.push('/');
+        }
+        this.props.signIn(this.state.userId, this.state.password, this.props.history);
     }
 
     render() {
@@ -44,7 +58,7 @@ class LoginPage extends React.Component {
                        onChange={this.onPasswordChange}/>
                 </div>
                 {error}
-                <div onClick={this.signIn}>Log in!</div>
+                <div onClick={this.login}>Log in!</div>
                 <Link to={"/signup"}>Click here to sign up!</Link>
             </div>
         );
@@ -53,20 +67,22 @@ class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
     signIn: PropTypes.func.isRequired,
-    error: PropTypes.string
+    error: PropTypes.string,
+    history: PropTypes.object,
+    authenticated: PropTypes.bool
 };
 
 function mapStateToProps(state) {
     return {
-        error: state.error,
-        auth: state.authenticated
+        error: state.auth.error,
+        auth: state.auth.authenticated
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        signIn: () => {
-            dispatch(login(this.state.userId, this.state.password, this.props.history));
+        signIn: (username, password, history) => {
+            dispatch(login(username, password, history));
         }
     };
 };

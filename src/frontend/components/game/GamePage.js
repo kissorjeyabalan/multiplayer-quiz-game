@@ -1,0 +1,162 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {REQUIRES_AUTHENTICATION} from "../../actions/action-types";
+import GameList from './GameList';
+import {createRoom, getRooms, joinRoom, forfeitGame, refreshRoom} from '../../actions/game-actions';
+import io from 'socket.io-client';
+import axios from 'axios';
+
+class GamePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.joinRoom = this.joinRoom.bind(this);
+        this.createRoom = this.createRoom.bind(this);
+        this.doLoginWebSocket = this.doLoginWebSocket.bind(this);
+    }
+
+    componentDidMount() {
+        if (!this.props.authenticated) {
+            this.props.requireAuth();
+            return;
+        }
+
+        this.props.getRooms();
+
+        // socket stuff here
+        this.socket = io(window.location.origin);
+        this.doLoginWebSocket();
+
+        this.socket.on('room', (data) => {
+            console.log('received on room', data);
+           if (data.type === 'REFRESH_LOBBY') {
+               this.props.getRooms();
+           }
+           if (data.type === 'REFRESH_ROOM') {
+               this.props.refreshRoom(this.props.roomId);
+           }
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.forfeitGame();
+        this.socket.disconnect();
+    }
+
+    doLoginWebSocket() {
+        // Taken from pg6300 repo
+        const url = '/api/wstoken';
+        axios.post(url).then(res => {
+            this.socket.emit('login', res.data);
+        }).catch(err => {
+           if (err.response.status === 401) {
+               this.props.requireAuth();
+           }
+        });
+    }
+
+    joinRoom(roomId) {
+        this.props.joinRoom(roomId, this.socket);
+    }
+
+    createRoom() {
+        this.props.createRoom(this.socket);
+    }
+
+    render() {
+        if (this.props.error != null) {
+            return(
+                <div>
+                    <h1>ERROR: ${this.props.error}</h1>
+                </div>
+            );
+        }
+
+        if (this.props.game && this.props.game.started) {
+            return(
+              <div>
+                  <QuizPage socket={this.socket} game={this.props.game}/>
+              </div>
+            );
+        }
+
+        if (this.props.roomId === null) {
+            return (
+                <div>
+                    <h1>Available Games</h1>
+                    <div>
+                        <GameList selectRoom={this.joinRoom}/>
+                        <button type="button" onClick={this.createRoom}>Create Room</button>
+                    </div>
+                </div>
+            );
+        }
+
+        return(
+          <div>
+              <h1>You're in room: ${this.props.roomId}</h1>
+              <h2>Participants</h2>
+              <ul>
+                  {this.props.game.participants.map(participant =>
+                      <li key={participant.name}>Player: {participant.name}</li>
+                  )}
+              </ul>
+              {this.props.roomId === this.props.userId && this.props.game.participants.length > 1 &&
+                <button type="button" onClick={this.startGame}>Start Quiz</button>
+              }
+          </div>
+        );
+    }
+}
+
+GamePage.propTypes = {
+    authenticated: PropTypes.bool,
+    userId: PropTypes.string,
+    error: PropTypes.string,
+    requireAuth: PropTypes.func,
+    joinRoom: PropTypes.func,
+    createRoom: PropTypes.func,
+    getRooms: PropTypes.func,
+    forfeitGame: PropTypes.func,
+    refreshRoom: PropTypes.func,
+    game: PropTypes.object,
+    games: PropTypes.array,
+    roomId: PropTypes.string
+};
+
+function mapStateToProps(state) {
+    return {
+        authenticated: state.auth.authenticated,
+        userId: state.auth.userId,
+        error: state.auth.error,
+        game: state.game.game,
+        games: state.game.games,
+        roomId: state.game.roomId
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        requireAuth: () => {
+            dispatch({type: REQUIRES_AUTHENTICATION});
+        },
+        joinRoom: (roomId, socket) => {
+            dispatch(joinRoom(roomId, socket));
+        },
+        createRoom: (socket) => {
+            dispatch(createRoom(socket));
+        },
+        getRooms: () => {
+            dispatch(getRooms());
+        },
+        forfeitGame: () => {
+            dispatch(forfeitGame());
+        },
+        refreshRoom: (roomId) => {
+            dispatch(refreshRoom(roomId));
+        }
+    };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(GamePage));

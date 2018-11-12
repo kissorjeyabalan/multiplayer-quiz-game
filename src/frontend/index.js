@@ -8,6 +8,8 @@ import rootReducer from './reducers/root-reducer';
 import {AUTHENTICATED} from './actions/action-types';
 import App from './components/App';
 import 'babel-polyfill';
+import axios from 'axios';
+import {logOut} from './actions/user-actions';
 
 const store = createStore(rootReducer, composeWithDevTools(
     applyMiddleware(thunk)
@@ -16,6 +18,9 @@ const store = createStore(rootReducer, composeWithDevTools(
 const user = localStorage.getItem('user');
 if (user) {
     store.dispatch({type: AUTHENTICATED, data: {userId: user}});
+    axios.get('/api/user').catch(() => {
+        store.dispatch(logOut());
+    });
 }
 
 ReactDOM.render(

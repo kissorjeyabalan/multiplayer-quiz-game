@@ -12,6 +12,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const socket = require('./sockets/handler');
 const authRoute = require('./routes/auth-route');
+const gameRoute = require('./routes/game-route');
 const Users = require('./db/users');
 
 const port = 8080;
@@ -56,6 +57,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/api', authRoute);
+app.use('/api', gameRoute);
+
 app.use((req, res) => {
     res.sendFile(path.resolve(__dirname, '..', '..', 'public', 'index.html'));
 });

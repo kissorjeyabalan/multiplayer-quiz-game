@@ -27,6 +27,9 @@ class RegisterPage extends React.Component {
     }
 
     signUp() {
+        if (this.props.authenticated && this.props.history !== undefined) {
+            this.props.history.push('/');
+        }
         this.props.signUp(this.state.userId, this.state.password, this.props.history);
     }
 
@@ -60,13 +63,14 @@ class RegisterPage extends React.Component {
 RegisterPage.propTypes = {
     signUp: PropTypes.func.isRequired,
     error: PropTypes.string,
-    history: PropTypes.any
+    history: PropTypes.object,
+    authenticated: PropTypes.bool
 };
 
 function mapStateToProps(state) {
     return {
-        error: state.error,
-        auth: state.authenticated
+        error: state.auth.error,
+        authenticated: state.auth.authenticated
     };
 }
 
