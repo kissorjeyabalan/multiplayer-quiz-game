@@ -35,7 +35,7 @@ router.post('/games/:roomId', (req, res) => {
     }
 
     if (Games.userIsInGame(req.user.id)) {
-        return res.status(204).send();
+        return res.status(400).send();
     }
 
     const game = Games.joinGame(req.user.id, req.params.roomId);

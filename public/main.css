@@ -1,0 +1,82 @@
+/*
+Parts of CSS taken from
+https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/public/style.css
+https://github.com/arcuri82/pg6300/blob/master/les08/server_client_separated/frontend/public/style.css
+*/
+body {
+    background-color: darkslategrey;
+}
+
+#root {
+    margin: 35px;
+}
+
+.headerBar {
+    margin-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid black;
+    height: 50px;
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-evenly;
+}
+
+.msgDiv {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.notLoggedInMsg {
+    justify-self: flex-start;
+}
+
+.home {
+    float: left;
+}
+
+.btnPartHeader {
+    float: right;
+    margin: 30px;
+}
+
+.btn {
+    width: 90px;
+    height: 20px;
+    background-color: rgb(207, 205, 200);
+    color: #ec6589;
+    font-size: 1em;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid rgb(153, 153, 153);
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+.btnPart {
+    display: inline-flex;
+}
+
+.hoverBtn {
+    background-color: coral;
+    margin: 2px;
+    border: none;
+    border-radius: 20%;
+    padding: 14px 17px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.hoverBtn:hover {
+    background-color: lightcoral;
+}

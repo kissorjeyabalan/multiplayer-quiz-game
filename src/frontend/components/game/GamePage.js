@@ -12,11 +12,13 @@ import axios from 'axios';
 class GamePage extends React.Component {
     constructor(props) {
         super(props);
+
         this.joinRoom = this.joinRoom.bind(this);
         this.startGame = this.startGame.bind(this);
         this.createRoom = this.createRoom.bind(this);
         this.doLoginWebSocket = this.doLoginWebSocket.bind(this);
     }
+
 
     componentDidMount() {
         if (!this.props.authenticated) {
@@ -26,7 +28,6 @@ class GamePage extends React.Component {
 
         this.props.getRooms();
 
-        // socket stuff here
         this.socket = io(window.location.origin);
         this.doLoginWebSocket();
 
@@ -46,7 +47,9 @@ class GamePage extends React.Component {
 
     componentWillUnmount() {
         this.props.forfeitGame();
-        this.socket.disconnect();
+        if (this.socket != null) {
+            this.socket.disconnect();
+        }
     }
 
     doLoginWebSocket() {
@@ -73,10 +76,18 @@ class GamePage extends React.Component {
         this.props.startGame(this.props.roomId, this.socket);
     }
     render() {
-        if (this.props.error != null) {
+        if (this.props.authError != null) {
             return(
                 <div>
-                    <h1>ERROR: ${this.props.error}</h1>
+                    <h1>ERROR: {this.props.authError}</h1>
+                </div>
+            );
+        }
+
+        if (this.props.gameError != null) {
+            return(
+                <div>
+                    <h1>ERROR: {this.props.gameError}</h1>
                 </div>
             );
         }
@@ -95,7 +106,7 @@ class GamePage extends React.Component {
                     <h1>Available Games</h1>
                     <div>
                         <GameList selectRoom={this.joinRoom}/>
-                        <button type="button" onClick={this.createRoom}>Create Room</button>
+                        <div className="hoverBtn" onClick={this.createRoom}>Create Room</div>
                     </div>
                 </div>
             );
@@ -111,7 +122,7 @@ class GamePage extends React.Component {
                   )}
               </ul>
               {this.props.roomId === this.props.userId && this.props.game.participants.length > 1 &&
-                <button type="button" onClick={this.startGame}>Start Quiz</button>
+                <div className="hoverBtn" onClick={this.startGame}>Start Quiz</div>
               }
           </div>
         );
@@ -121,7 +132,8 @@ class GamePage extends React.Component {
 GamePage.propTypes = {
     authenticated: PropTypes.bool,
     userId: PropTypes.string,
-    error: PropTypes.string,
+    authError: PropTypes.string,
+    gameError: PropTypes.string,
     requireAuth: PropTypes.func,
     joinRoom: PropTypes.func,
     createRoom: PropTypes.func,
@@ -139,7 +151,8 @@ function mapStateToProps(state) {
     return {
         authenticated: state.auth.authenticated,
         userId: state.auth.userId,
-        error: state.auth.error,
+        authError: state.auth.error,
+        gameError: state.game.error,
         game: state.game.game,
         games: state.game.games,
         roomId: state.game.roomId,

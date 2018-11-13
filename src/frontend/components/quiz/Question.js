@@ -7,9 +7,9 @@ const Question = (props) => {
     return(
         <div>
             <h2>Question: {question.question}</h2>
-            <div>
+            <div className="btnPart">
                 {question.answers.map((answer, index) =>
-                    <button key={index} onClick={() => onAnswer(index)}>{answer}</button>
+                    <div className="btn fullWidth fullHeight" key={index} onClick={() => onAnswer(index)}>{answer}</div>
                 )}
             </div>
         </div>

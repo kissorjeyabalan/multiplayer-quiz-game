@@ -42,17 +42,19 @@ class LoginPage extends React.Component {
             <div>
                 <h1>Login</h1>
                 <div>
+                    <p>Username: </p>
                     <input type="text"
                            value={this.state.userId}
                            onChange={this.onUserIdChange}/>
                 </div>
                 <div>
-                <input type="password"
-                       value={this.state.password}
-                       onChange={this.onPasswordChange}/>
+                    <p>Password: </p>
+                    <input type="password"
+                           value={this.state.password}
+                           onChange={this.onPasswordChange}/>
                 </div>
-                {error}
-                <div onClick={this.login}>Log in!</div>
+                    {error}
+                <div className="btn" onClick={this.login}>Log in!</div>
                 <Link to={"/signup"}>Click here to sign up!</Link>
             </div>
         );

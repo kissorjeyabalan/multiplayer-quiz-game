@@ -1,3 +1,10 @@
+
+## Known issues
+In interest of time, I haven't had the possibility to fix these issues.
+However, I am aware that these are there - and would fix them if I had more time.
+
+- Handling multiple tabs - in the current iteration of the SPA, 
+
 ## Sources
 For learning more about react-dom:
 https://reacttraining.com/

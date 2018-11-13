@@ -36,11 +36,15 @@ function createGame(userId) {
 }
 
 function userIsInGame(userId) {
-    return games.filter((game) => {
-        return game.participants.filter(player => {
-            return player.name === userId;
+    games.forEach(game => {
+        game.participants.forEach(player => {
+            if (player.name === userId) {
+                return true;
+            }
         });
-    }) > 0;
+    });
+
+    return false;
 }
 
 function joinGame(userId, roomId) {

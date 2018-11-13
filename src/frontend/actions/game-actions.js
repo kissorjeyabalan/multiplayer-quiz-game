@@ -9,7 +9,7 @@ export function joinRoom(roomId, socket) {
                 dispatch({type: type.JOINED_ROOM, data: {roomId: res.data.roomId, game: res.data.game}});
                 socket.emit('join-room', {roomId: res.data.roomId});
             }).catch(() => {
-            dispatch({type: type.GAME_ERROR, data: 'Failed joining game!'});
+            dispatch({type: type.GAME_ERROR, data: {error: 'Failed joining game!'}});
         });
     };
 }
@@ -21,7 +21,7 @@ export function createRoom(socket) {
             console.log("socket", socket);
             socket.emit('room-created', {roomId: res.data.roomId});
         }).catch(() => {
-            dispatch({type: type.GAME_ERROR, data: 'Failed creating room!'});
+            dispatch({type: type.GAME_ERROR, data: {error: 'Failed creating room!'}});
         });
     };
 }

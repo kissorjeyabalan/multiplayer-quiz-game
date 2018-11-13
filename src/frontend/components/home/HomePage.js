@@ -8,22 +8,24 @@ class HomePage extends React.Component {
         let content;
         console.log(this.props);
         if (this.props.authenticated) {
-            content = (<div>
-                <h2>Welcome back, ${this.props.userId}!</h2>
-                <Link to={"/games"}>Click here to play!</Link>
+            content = (
+                <div>
+                    <div>
+                        <h2>Quiz!!!</h2>
+                        <p>Play against your friends and see who prevails!</p>
+                    </div>
+                <div className="btnPart">
+                    <Link to={"/games"}>Click here to play!</Link>
+                </div>
             </div>);
         } else {
             content = (<div>
                 <h2>You need to sign up or log in to play!</h2>
-                <Link to={"/signup"}>Click here to sign up!</Link>
-                <br/>
-                <Link to={"/login"}>Click here to log in!</Link>
             </div>);
         }
 
         return(
             <div>
-                <h1>Quiz!!</h1>
                 {content}
             </div>
         );

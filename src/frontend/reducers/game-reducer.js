@@ -1,4 +1,11 @@
-import {JOINED_ROOM, REFRESHED_LOBBY, REFRESHED_ROOM, GAME_FORFEITED, REFRESHED_PLAYER} from "../actions/action-types";
+import {
+    JOINED_ROOM,
+    REFRESHED_LOBBY,
+    REFRESHED_ROOM,
+    GAME_FORFEITED,
+    REFRESHED_PLAYER,
+    GAME_ERROR
+} from "../actions/action-types";
 import appState from './app-state';
 
 export default function (state = appState.game, action) {
@@ -15,6 +22,8 @@ export default function (state = appState.game, action) {
             return { ...state, player: action.data.player};
         case GAME_FORFEITED:
             return { ...state, roomId: null, game: null};
+        case GAME_ERROR:
+            return { ...state, error: action.data.error};
         default:
             return state;
     }

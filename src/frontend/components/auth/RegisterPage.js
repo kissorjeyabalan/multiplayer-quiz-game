@@ -43,17 +43,19 @@ class RegisterPage extends React.Component {
             <div>
                 <h1>Sign up</h1>
                 <div>
+                    <p>Username: </p>
                     <input type="text"
                            value={this.state.userId}
                            onChange={this.onUserIdChange}/>
                 </div>
                 <div>
+                    <p>Password: </p>
                 <input type="password"
                        value={this.state.password}
                        onChange={this.onPasswordChange}/>
                 </div>
                 {error}
-                <div onClick={this.signUp}>Sign up!</div>
+                <div className="btn" onClick={this.signUp}>Sign up!</div>
                 <Link to={"/login"}>Click here if you're already registered!</Link>
             </div>
         );
