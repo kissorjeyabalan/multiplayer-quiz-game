@@ -32,7 +32,6 @@ function createUser(id, password) {
         password: password
     };
 
-    console.l
     users.set(id, user);
     console.log(users);
     return true;
