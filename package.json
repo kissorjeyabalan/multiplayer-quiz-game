@@ -4,10 +4,8 @@
   "description": "A versus quiz game",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
-    "dev": "webpack-dev-server --config ./webpack.config.js --mode development && npm run start",
     "start": "node src/backend/main.js",
-    "alt_dev": "webpack --mode development && npm run start"
+    "dev": "webpack --mode development && npm run start"
   },
   "author": "Kissor Jeyabalan",
   "license": "LGPL-3.0",
@@ -39,7 +37,6 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "history": "4.7.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "prop-types": "^15.6.2",
@@ -48,7 +45,6 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
-    "redux-socket.io": "^1.4.0",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1"

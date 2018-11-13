@@ -18,6 +18,7 @@ const Users = require('./db/users');
 const port = 8080;
 const app = express();
 const server = require('http').Server(app);
+const os = require('os');
 
 app.use(bodyParser.json());
 app.use(session({
@@ -65,7 +66,8 @@ app.use((req, res) => {
 
 socket.start(server);
 server.listen(port, () => {
-    console.log("Starting server!");
+    console.log("Server started!");
+    console.log(`Client is available at: http://${os.hostname()}:${port}`);
 });
 
 module.exports = app;

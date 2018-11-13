@@ -15,6 +15,10 @@ router.post('/games', (req, res) => {
     }
 
     let game = Games.createGame(req.user.id);
+    if (game == null) {
+        return res.status(401).send();
+    }
+
     game.participants = [...game.participants];
     res.status(201).send({roomId: game.roomId, game: game});
 });

@@ -13,8 +13,13 @@ function getGameIndex(roomId) {
         return game.roomId === roomId;
     });
 }
+
+function userOwnsGame(userId) {
+    return games.find(game => game.roomId === userId) != null;
+}
 function createGame(userId) {
-    if (userIsInGame(userId)) return false;
+    if (userIsInGame(userId)) return null;
+    if (userOwnsGame(userId)) return null;
 
     let game = {
         started: false,
@@ -159,12 +164,6 @@ function forfeitGame(userId) {
         if (games[gameIndex].participants.length === 0) {
             games.splice(gameIndex, 1);
             return;
-        }
-        if (games[gameIndex].roomId === userId) {
-            let random = games[gameIndex].participants[
-                Math.floor(Math.random() * games[gameIndex].participants.length)
-                ];
-            games[gameIndex].roomId = random.name;
         }
     }
 

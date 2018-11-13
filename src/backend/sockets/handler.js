@@ -39,10 +39,11 @@ const start = (server) => {
             const userId = ActiveUsers.getUser(socket.id);
             ActiveUsers.removeSocket(socket.id);
             let roomId = Games.getRoomUserIsIn(userId);
-            console.info(`User ${userId} has disconnected - forfeiting all games.`);
+            console.info(`User ${userId} has disconnected - forfeiting all games. Room  ID is ${roomId}`);
             Games.forfeitGame(userId);
             if (roomId != null) {
                 socket.to(roomId).emit('room', {type: 'REFRESH_ROOM'});
+                socket.to(roomId).emit('game', {type: 'REFRESH_ROOM'});
                 socket.broadcast.emit('room', {type: 'REFRESH_LOBBY'});
             }
         });
