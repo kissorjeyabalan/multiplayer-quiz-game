@@ -65,7 +65,8 @@ As extra npm modules, I added the following:
 - [redux] - For handling state across multiple components. It just makes syncing up things so seamless. It's definitely a must have for react projects.
 - [react-redux] -  A bunch of binders that simplifies connecting redux
 - [redux-thunk] - So far, it's my favorite middleware for redux. Lifesaver for asynchronous calls, and allowed me to simplify and reuse my actions everywhere.
-
+- [redux-devtools-extension] - Very useful development plugin. I've left it in the code, and haven't disabled it as the code isn't for production. This tool allowed me to debug my app a lot easier, when there was something wrong with the state, I could count on this plugin to tell me where something might have gone wrong. It supports hotreload, and playing back redux actions and when a bunch of dispatches are triggered simultaneously, it's timetravel feature to go back in time and look
+    at states was very helpful.
 ### Known issues
 In interest of time, I haven't had the possibility to fix these issues.
 However, I am aware that these are there - and would fix them if I had more time.
@@ -78,3 +79,4 @@ However, I am aware that these are there - and would fix them if I had more time
  [redux]: <https://www.npmjs.com/package/redux>
  [react-redux]: <https://www.npmjs.com/package/react-redux>
  [redux-thunk]: <https://www.npmjs.com/package/redux-thunk>
+ [redux-devtools-extension]: <https://www.npmjs.com/package/redux-devtools-extension>
