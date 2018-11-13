@@ -1,5 +1,6 @@
 const Quiz = require('../quizes');
 const games = [];
+const timeState = new Map();
 
 function getAllAvailableGames() {
     return games.filter((game) => {
@@ -7,16 +8,24 @@ function getAllAvailableGames() {
     });
 }
 
+function getGameIndex(roomId) {
+    return games.findIndex((game) => {
+        return game.roomId === roomId;
+    });
+}
 function createGame(userId) {
     if (userIsInGame(userId)) return false;
 
     let game = {
         started: false,
+        finished: false,
         roomId: userId,
         participants: [{
             name: userId,
             score: 0,
-            finished: false
+            timer: 20,
+            finished: false,
+            question: 0
         }],
         quiz: null
     };
@@ -35,39 +44,110 @@ function userIsInGame(userId) {
 }
 
 function joinGame(userId, roomId) {
-    console.log("received", userId, roomId);
+    //console.log("received", userId, roomId);
     if (userIsInGame(userId)) return null;
 
-    const index = games.findIndex((game) => {
-        return game.roomId === roomId && game.started === false;
+    const index = getGameIndex(roomId);
+    if (index === -1) return null;
+    if (games[index].started === true) return null;
+
+    games[index].participants.push({
+        name: userId,
+        score: 0,
+        timer: 20,
+        finished: false,
+        question: 0
     });
+    return games[index];
 
-    console.log("index is", index);
-
-    if (index !== -1) {
-        console.log("got in index");
-        games[index].participants.push({
-            name: userId,
-            score: 0,
-            finished: false
-        });
-        return games[index];
-    }
-    return null;
 }
 
+function startGame(userId, roomId) {
+    if (userId !== roomId) return false;
+    const index = getGameIndex(roomId);
+    if (games[index].roomId !== userId) return false;
+    games[index].quiz = Quiz.getRandomQuiz();
+    games[index].started = true;
 
-function forfeitGame(userId) {
-    console.log("forfeit for ", userId);
-    let gameIndex = games.findIndex((game) => {
-        console.log("checking in room", game);
+    games[index].participants.forEach(player => {
+        let date = new Date();
+        timeState.set(player.name, date);
+    });
+
+    return true;
+}
+
+function getPlayerInRoom(userId) {
+    const gameIndex = getUserGameIndex(userId);
+    //console.log("user index is", gameIndex);
+    //console.log("game at that index", games[gameIndex]);
+    return games[gameIndex].participants.find((player) => player.name === userId);
+}
+
+function submitAnswer(userId, answerIndex) {
+    console.log("received userid answerid", userId, answerIndex);
+    let gameIndex = getUserGameIndex(userId);
+    let player = getPlayerInRoom(userId);
+    if (player.finished) return player;
+    console.log("gameIndex and Player", gameIndex, player);
+
+    let correctAnswerAtCurrentPlayerIndex = games[gameIndex].quiz.questions[player.question].correctAnswer;
+
+    console.log("Correct answer for this is ", correctAnswerAtCurrentPlayerIndex);
+    let currTime = new Date();
+    console.log("Created time ", currTime);
+
+    if (correctAnswerAtCurrentPlayerIndex === answerIndex) {
+        console.log("yes this was correct answer");
+        let prevTime = timeState.get(userId);
+        console.log("previous time was", prevTime);
+        let differenceInSeconds = (currTime - prevTime) / 1000;
+        console.log("difference was", differenceInSeconds);
+        let fullScore = 20;
+        fullScore -= differenceInSeconds;
+        console.log("which means score is ", fullScore);
+        if (fullScore > 0) {
+            player.score += fullScore;
+        }
+    }
+
+    let nextIndex = player.question + 1;
+    console.log("next index is ", nextIndex);
+    console.log("current question length is ", games[gameIndex].quiz.questions.length);
+    if ((games[gameIndex].quiz.questions.length > nextIndex)) {
+        console.log("question has next index");
+        player.timer = 20;
+        player.question = nextIndex;
+    } else {
+        player.finished = true;
+        player.timer = null;
+    }
+
+    timeState.set(userId, currTime);
+    if (checkGameOver(gameIndex)) {
+       games[gameIndex].finished = true;
+    }
+    return player;
+}
+
+function checkGameOver(gameIndex) {
+    const finished =
+        games[gameIndex].participants.filter(player => player.finished);
+
+    return finished.length === games[gameIndex].participants.length;
+
+}
+
+function getUserGameIndex(userId) {
+    return games.findIndex((game) => {
         return game.participants.filter(player => {
-            console.log("checking one against other", player.name, userId);
             return player.name === userId;
         }).length > 0;
     });
-
-    console.log("gameIndex", gameIndex);
+}
+function forfeitGame(userId) {
+    //console.log("forfeit for ", userId);
+    let gameIndex = getUserGameIndex(userId);
 
     if (gameIndex !== -1) {
         games[gameIndex].participants =
@@ -83,18 +163,18 @@ function forfeitGame(userId) {
             games[gameIndex].roomId = random.name;
         }
     }
+
+    timeState.delete(userId);
 }
 
 function getGame(roomId) {
-    let gameIndex = games.findIndex((game) => {
-        return game.roomId === roomId;
-    });
+    let gameIndex = getGameIndex(roomId);
+
     if (gameIndex !== -1) {
         return games[gameIndex];
     }
 
     return null;
-
 }
 
 function getGameWithRoomAndUser(roomId, userId) {
@@ -122,4 +202,4 @@ function getRoomUserIsIn(userId) {
     return name;
 }
 
-module.exports = {getRoomUserIsIn, getAllAvailableGames, createGame, userIsInGame, joinGame, forfeitGame, getGame, getGameWithRoomAndUser};
+module.exports = {getPlayerInRoom, submitAnswer, startGame, getRoomUserIsIn, getAllAvailableGames, createGame, userIsInGame, joinGame, forfeitGame, getGame, getGameWithRoomAndUser};

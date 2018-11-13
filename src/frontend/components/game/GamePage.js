@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {REQUIRES_AUTHENTICATION} from "../../actions/action-types";
 import GameList from './GameList';
-import {createRoom, getRooms, joinRoom, forfeitGame, refreshRoom} from '../../actions/game-actions';
+import QuizPage from '../quiz/QuizPage';
+import {createRoom, getSelfPlayer, getRooms, joinRoom, forfeitGame, refreshRoom, startGame} from '../../actions/game-actions';
 import io from 'socket.io-client';
 import axios from 'axios';
 
@@ -12,6 +13,7 @@ class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.joinRoom = this.joinRoom.bind(this);
+        this.startGame = this.startGame.bind(this);
         this.createRoom = this.createRoom.bind(this);
         this.doLoginWebSocket = this.doLoginWebSocket.bind(this);
     }
@@ -35,6 +37,9 @@ class GamePage extends React.Component {
            }
            if (data.type === 'REFRESH_ROOM') {
                this.props.refreshRoom(this.props.roomId);
+           }
+           if (data.type === 'REFRESH_PLAYER') {
+               this.props.refreshPlayer();
            }
         });
     }
@@ -64,6 +69,9 @@ class GamePage extends React.Component {
         this.props.createRoom(this.socket);
     }
 
+    startGame() {
+        this.props.startGame(this.props.roomId, this.socket);
+    }
     render() {
         if (this.props.error != null) {
             return(
@@ -73,10 +81,10 @@ class GamePage extends React.Component {
             );
         }
 
-        if (this.props.game && this.props.game.started) {
+        if (this.props.game != null && this.props.game.started) {
             return(
               <div>
-                  <QuizPage socket={this.socket} game={this.props.game}/>
+                  <QuizPage socket={this.socket}/>
               </div>
             );
         }
@@ -117,9 +125,11 @@ GamePage.propTypes = {
     requireAuth: PropTypes.func,
     joinRoom: PropTypes.func,
     createRoom: PropTypes.func,
+    startGame: PropTypes.func,
     getRooms: PropTypes.func,
     forfeitGame: PropTypes.func,
     refreshRoom: PropTypes.func,
+    refreshPlayer: PropTypes.func,
     game: PropTypes.object,
     games: PropTypes.array,
     roomId: PropTypes.string
@@ -132,7 +142,8 @@ function mapStateToProps(state) {
         error: state.auth.error,
         game: state.game.game,
         games: state.game.games,
-        roomId: state.game.roomId
+        roomId: state.game.roomId,
+        player: state.game.player
     };
 }
 
@@ -155,6 +166,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         refreshRoom: (roomId) => {
             dispatch(refreshRoom(roomId));
+        },
+        startGame: (roomId, socket) => {
+            dispatch(startGame(roomId, socket));
+        },
+        refreshPlayer: () => {
+            dispatch(getSelfPlayer());
         }
     };
 };

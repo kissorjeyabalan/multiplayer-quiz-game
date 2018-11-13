@@ -49,3 +49,25 @@ export function refreshRoom(roomId) {
         });
     };
 }
+
+export function startGame(roomId, socket) {
+    return async () => {
+        axios.post(`${URL}/games/${roomId}/start`).then(() => {
+            socket.emit('game', {type: 'REFRESH_ROOM', roomId: roomId});
+        });
+    };
+}
+
+export function getSelfPlayer() {
+    return async (dispatch) => {
+        axios.get(`${URL}/user/player`).then((res) => {
+            dispatch({type: type.REFRESHED_PLAYER, data: {player: res.data.player}});
+        }).catch(err => console.log(err));
+    };
+}
+
+export function manualDispatch(type, data) {
+    return async (dispatch) => {
+        dispatch({type: type, data: data});
+    };
+}

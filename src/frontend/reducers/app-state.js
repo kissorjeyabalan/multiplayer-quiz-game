@@ -7,6 +7,7 @@ export default {
     game: {
         game: null,
         games: [],
-        roomId: null
+        roomId: null,
+        player: null
     }
 };
