@@ -103,11 +103,11 @@ function submitAnswer(userId, answerIndex) {
         console.log("previous time was", prevTime);
         let differenceInSeconds = (currTime - prevTime) / 1000;
         console.log("difference was", differenceInSeconds);
-        let fullScore = 20;
-        fullScore -= differenceInSeconds;
-        console.log("which means score is ", fullScore);
-        if (fullScore > 0) {
-            player.score += fullScore;
+        let score = 20;
+        score -= differenceInSeconds;
+        console.log("which means score is ", score);
+        if (score > 0) {
+            player.score += Math.round(score);
         }
     }
 

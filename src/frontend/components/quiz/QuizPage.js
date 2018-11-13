@@ -49,6 +49,7 @@ class QuizPage extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <div>
                 <h1>Quiz about {this.props.quiz.topic}</h1>

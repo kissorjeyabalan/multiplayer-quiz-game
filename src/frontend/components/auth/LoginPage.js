@@ -17,12 +17,6 @@ class LoginPage extends React.Component {
         this.login = this.login.bind(this);
     }
 
-    componentDidUpdate() {
-        if (this.props.authenticated) {
-            this.props.history.push('/');
-        }
-    }
-
     onUserIdChange(event) {
         this.setState({userId: event.target.value});
     }

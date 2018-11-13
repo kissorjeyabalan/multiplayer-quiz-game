@@ -56,6 +56,9 @@ const start = (server) => {
                 socket.join(data.roomId);
                 socket.broadcast.emit('room', {type: 'REFRESH_LOBBY'});
                 socket.emit('room', {type: 'REFRESH_PLAYER'});
+
+                const game = Games.getGame(data.roomId);
+                socket.emit('game', {type: 'REFRESH_PLAYER', data: {roomId: game.roomId, game: game}});
             }
         });
 
@@ -67,6 +70,9 @@ const start = (server) => {
                 socket.join(data.roomId);
                 socket.to(data.roomId).emit('room', {type: 'REFRESH_ROOM'});
                 socket.emit('room', {type: 'REFRESH_PLAYER'});
+
+                const game = Games.getGame(data.roomId);
+                socket.emit('game', {type: 'REFRESH_PLAYER', data: {roomId: game.roomId, game: game}});
             }
         });
 

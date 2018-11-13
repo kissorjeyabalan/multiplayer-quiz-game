@@ -28,12 +28,11 @@ export function signUp(username, password, history) {
     };
 }
 
-export function logOut(history) {
+export function logOut() {
     return async (dispatch) => {
         axios.post(`${URL}/auth/logout`).then(() => {
             dispatch({type: type.UNAUTHENTICATED});
            localStorage.removeItem('user');
-           history.push('/');
         }).catch((err) => {
             dispatch({type: type.AUTH_ERROR, data: `Unknown error occured: ${err}`});
         });

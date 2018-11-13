@@ -70,7 +70,7 @@ router.get('/user/player', (req, res) => {
 
     let player = Games.getPlayerInRoom(req.user.id);
     console.log("PlAyErS", player);
-    if (player != null) return res.status(404).send();
+    if (player == null) return res.status(404).send();
 
     res.status(200).send({player: player});
 });

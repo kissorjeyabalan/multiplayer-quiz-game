@@ -26,7 +26,7 @@ const GameOver = (props) => {
                             {getSortedPlayers(players).map((player, index) =>
                                 <li key={index}>{player.name} - {player.score} points</li>
                             )}
-                            <Link to={HomePage}>Click here to leave the game.</Link>
+                            <Link to={"/"}>Click here to leave the game.</Link>
                         </ul>
                     </div>
 
@@ -44,9 +44,9 @@ function getSortedPlayers(players) {
 }
 
 function compareScores(a, b) {
-    if (a.score > b.score)
+    if (a.score < b.score)
         return 1;
-    if (b.score < a.score)
+    if (b.score > a.score)
         return -1;
     return 0;
 }
