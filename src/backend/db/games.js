@@ -53,7 +53,6 @@ function userIsInGame(userId) {
 }
 
 function joinGame(userId, roomId) {
-    //console.log("received", userId, roomId);
     if (userIsInGame(userId)) return null;
 
     const index = getGameIndex(roomId);
@@ -88,43 +87,30 @@ function startGame(userId, roomId) {
 
 function getPlayerInRoom(userId) {
     const gameIndex = getUserGameIndex(userId);
-    //console.log("user index is", gameIndex);
-    //console.log("game at that index", games[gameIndex]);
     return games[gameIndex].participants.find((player) => player.name === userId);
 }
 
 function submitAnswer(userId, answerIndex) {
-    console.log("received userid answerid", userId, answerIndex);
     let gameIndex = getUserGameIndex(userId);
     let player = getPlayerInRoom(userId);
     if (player.finished) return player;
-    console.log("gameIndex and Player", gameIndex, player);
 
     let correctAnswerAtCurrentPlayerIndex = games[gameIndex].quiz.questions[player.question].correctAnswer;
 
-    console.log("Correct answer for this is ", correctAnswerAtCurrentPlayerIndex);
     let currTime = new Date();
-    console.log("Created time ", currTime);
 
     if (correctAnswerAtCurrentPlayerIndex === answerIndex) {
-        console.log("yes this was correct answer");
         let prevTime = timeState.get(userId);
-        console.log("previous time was", prevTime);
         let differenceInSeconds = (currTime - prevTime) / 1000;
-        console.log("difference was", differenceInSeconds);
         let score = 20;
         score -= differenceInSeconds;
-        console.log("which means score is ", score);
         if (score > 0) {
             player.score += Math.round(score);
         }
     }
 
     let nextIndex = player.question + 1;
-    console.log("next index is ", nextIndex);
-    console.log("current question length is ", games[gameIndex].quiz.questions.length);
     if ((games[gameIndex].quiz.questions.length > nextIndex)) {
-        console.log("question has next index");
         player.timer = 20;
         player.question = nextIndex;
     } else {
@@ -155,7 +141,6 @@ function getUserGameIndex(userId) {
     });
 }
 function forfeitGame(userId) {
-    //console.log("forfeit for ", userId);
     let gameIndex = getUserGameIndex(userId);
 
     if (gameIndex !== -1) {

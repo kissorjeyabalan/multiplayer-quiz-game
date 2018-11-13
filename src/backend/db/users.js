@@ -20,10 +20,7 @@ function verifyUser(id, password) {
 // Never do this in production - Password should be hashed, salted, peppered++
 function createUser(id, password) {
     console.log(users);
-    console.log('attempting to create user', id, password);
     if (getUser(id) != null) {
-        console.log("not null");
-        console.log(getUser(id));
         return false;
     }
 
@@ -33,7 +30,6 @@ function createUser(id, password) {
     };
 
     users.set(id, user);
-    console.log(users);
     return true;
 }
 

@@ -18,7 +18,6 @@ export function createRoom(socket) {
     return async (dispatch) => {
         axios.post(`${URL}/games`).then(res => {
             dispatch({type: type.JOINED_ROOM, data: {roomId: res.data.roomId, game: res.data.game}});
-            console.log("socket", socket);
             socket.emit('room-created', {roomId: res.data.roomId});
         }).catch(() => {
             dispatch({type: type.GAME_ERROR, data: {error: 'Failed creating room!'}});
@@ -44,7 +43,6 @@ export function forfeitGame() {
 export function refreshRoom(roomId) {
     return async (dispatch) => {
         axios.get(`${URL}/games/${roomId}`).then(res => {
-            console.log("refreshed", res);
             dispatch({type: type.REFRESHED_ROOM, data: {roomId: res.data.roomId, game: res.data.game}});
         });
     };
@@ -62,7 +60,7 @@ export function getSelfPlayer() {
     return async (dispatch) => {
         axios.get(`${URL}/user/player`).then((res) => {
             dispatch({type: type.REFRESHED_PLAYER, data: {player: res.data.player}});
-        }).catch(err => console.log(err));
+        });
     };
 }
 

@@ -15,10 +15,8 @@ export default function (state = appState.game, action) {
         case REFRESHED_LOBBY:
             return { ...state, games: action.data.games};
         case REFRESHED_ROOM:
-            console.log("REFRESHING ROOM WITH", action);
             return { ...state, roomId: action.data.roomId, game: action.data.game};
         case REFRESHED_PLAYER:
-            console.log("REFRESHING PLAYER WITH", action);
             return { ...state, player: action.data.player};
         case GAME_FORFEITED:
             return { ...state, roomId: null, game: null};

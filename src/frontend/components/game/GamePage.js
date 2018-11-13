@@ -32,7 +32,6 @@ class GamePage extends React.Component {
         this.doLoginWebSocket();
 
         this.socket.on('room', (data) => {
-            console.log('received on room', data);
            if (data.type === 'REFRESH_LOBBY') {
                this.props.getRooms();
            }

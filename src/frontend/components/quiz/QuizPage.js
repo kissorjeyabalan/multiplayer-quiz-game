@@ -19,7 +19,6 @@ class QuizPage extends React.Component {
     }
 
     componentDidMount() {
-        console.log("YA PROPS BOI", this.props);
         this.props.socket.on('game', (data) => {
             if (data.type === 'REFRESH_PLAYER') {
                 this.props.manualDispatch(type.REFRESHED_PLAYER, {player: data.player});
@@ -49,7 +48,6 @@ class QuizPage extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
                 <h1>Quiz about {this.props.quiz.topic}</h1>

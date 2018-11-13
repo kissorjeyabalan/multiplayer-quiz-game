@@ -5,7 +5,6 @@ const router = express.Router();
 
 
 router.post('/games', (req, res) => {
-    console.log('post games called');
     if (!req.user) {
         return res.status(401).send();
     }
@@ -24,7 +23,6 @@ router.post('/games', (req, res) => {
 });
 
 router.get('/games', (req, res) => {
-    console.log('get games called');
     if (!req.user) {
         return res.status(401).send();
     }
@@ -33,7 +31,6 @@ router.get('/games', (req, res) => {
 });
 
 router.post('/games/:roomId', (req, res) => {
-    console.log(`Join room with ID ${req.params.roomId}`);
     if (!req.user) {
         return res.status(401).send();
     }
@@ -53,7 +50,6 @@ router.post('/games/:roomId', (req, res) => {
 
 
 router.get('/games/:roomId', (req, res) => {
-   console.log('get specific room called');
    if (!req.user) {
        return res.status(401).send();
    }
@@ -67,13 +63,11 @@ router.get('/games/:roomId', (req, res) => {
 });
 
 router.get('/user/player', (req, res) => {
-    console.log("called user/player");
     if (!req.user) {
         return res.status(401).send();
     }
 
     let player = Games.getPlayerInRoom(req.user.id);
-    console.log("PlAyErS", player);
     if (player == null) return res.status(404).send();
 
     res.status(200).send({player: player});

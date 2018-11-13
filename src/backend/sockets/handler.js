@@ -49,11 +49,8 @@ const start = (server) => {
         });
 
         socket.on('room-created', (data) => {
-            console.log('room-created triggered');
-            console.log("data", data);
             const userId = ActiveUsers.getUser(socket.id);
             if (Games.getRoomUserIsIn(userId) === data.roomId) {
-                console.log("user is in room");
                 socket.join(data.roomId);
                 socket.broadcast.emit('room', {type: 'REFRESH_LOBBY'});
                 socket.emit('room', {type: 'REFRESH_PLAYER'});
@@ -64,8 +61,6 @@ const start = (server) => {
         });
 
         socket.on('join-room', (data) => {
-            console.log('join-room triggered');
-            console.log("data", data);
             const userId = ActiveUsers.getUser(socket.id);
             if (Games.getRoomUserIsIn(userId) === data.roomId) {
                 socket.join(data.roomId);
@@ -85,12 +80,11 @@ const start = (server) => {
             if (data.type === 'SUBMIT_ANSWER') {
                 const userId = ActiveUsers.getUser(socket.id);
                 const roomId = Games.getRoomUserIsIn(userId);
-                console.log("returned roomID", roomId);
+
                 const game = Games.getGame(roomId);
-                console.log("returned game", game);
                 const answer = data.answer;
-                console.log("answer from user was", answer);
                 let updated = Games.submitAnswer(userId, answer);
+
                 socket.emit('game', {type: 'REFRESH_PLAYER', player: updated});
                 socket.to(roomId).emit('game', {type: 'REFRESH_ROOM', data: {roomId: game.roomId, game: game}});
             }

@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 class HomePage extends React.Component {
     render() {
         let content;
-        console.log(this.props);
         if (this.props.authenticated) {
             content = (
                 <div>

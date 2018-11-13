@@ -66,8 +66,8 @@ app.use((req, res) => {
 
 socket.start(server);
 server.listen(port, () => {
-    console.log("Server started!");
-    console.log(`Client is available at: http://${os.hostname()}:${port}`);
+    console.info("Server started!");
+    console.info(`Client is available at: http://${os.hostname()}:${port}`);
 });
 
 module.exports = app;

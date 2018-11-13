@@ -12,7 +12,6 @@ const randomId = () => {
 };
 
 const createToken = (userId) => {
-    console.log("created ws token for " + userId);
     const t = randomId();
     tokens.set(t, userId);
     return t;
@@ -20,6 +19,7 @@ const createToken = (userId) => {
 
 const consumeToken = (t) => {
     const userId = tokens.get(t);
+    console.info(`User ${userId} has authenticated with WebSocket Token.`);
     tokens.delete(t);
     return userId;
 };
