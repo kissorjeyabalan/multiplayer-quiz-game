@@ -11,7 +11,7 @@ function getUser(id) {
 
 function verifyUser(id, password) {
     const user = getUser(id);
-    if (user === undefined) {
+    if (user == null) {
         return false;
     }
     return user.password === password;
@@ -19,8 +19,11 @@ function verifyUser(id, password) {
 
 // Never do this in production - Password should be hashed, salted, peppered++
 function createUser(id, password) {
+    console.log(users);
     console.log('attempting to create user', id, password);
-    if (getUser(id) !== undefined) {
+    if (getUser(id) != null) {
+        console.log("not null");
+        console.log(getUser(id));
         return false;
     }
 
@@ -29,6 +32,7 @@ function createUser(id, password) {
         password: password
     };
 
+    console.l
     users.set(id, user);
     console.log(users);
     return true;

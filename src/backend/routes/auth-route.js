@@ -9,12 +9,11 @@ const router = express.Router();
 const Tokens = require('../sockets/tokens');
 const Users = require('../db/users');
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
-    res.status(200).json({userId: req.user.id});
+router.post('/auth/login', passport.authenticate('local'), (req, res) => {
+    res.status(204).json({userId: req.user.id});
 });
 
-router.post('/signup', (req, res) => {
-    console.log('signup called', req.body);
+router.post('/auth/signup', (req, res) => {
     const created = Users.createUser(req.body.userId, req.body.password);
     if (!created) {
         res.status(400).send();
@@ -31,12 +30,12 @@ router.post('/signup', (req, res) => {
     });
 });
 
-router.post('/logout', (req, res) => {
+router.post('/auth/logout', (req, res) => {
     req.logout();
     res.status(204).send();
 });
 
-router.post('/wstoken', (req, res) => {
+router.post('/auth/wstoken', (req, res) => {
     if (!req.user) {
         res.status(401).send();
         return;
@@ -45,7 +44,7 @@ router.post('/wstoken', (req, res) => {
     res.status(201).json({wstoken: t});
 });
 
-router.get('/user', (req, res) => {
+router.get('/auth/user', (req, res) => {
     if (!req.user) {
         res.status(401).send();
         return;

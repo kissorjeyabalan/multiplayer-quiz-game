@@ -1,5 +1,7 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import HomePage from "../home/HomePage";
 
 const GameOver = (props) => {
     const {gameFinished, players} = props;
@@ -24,6 +26,7 @@ const GameOver = (props) => {
                             {getSortedPlayers(players).map((player, index) =>
                                 <li key={index}>{player.name} - {player.score} points</li>
                             )}
+                            <Link to={HomePage}>Click here to leave the game.</Link>
                         </ul>
                     </div>
 

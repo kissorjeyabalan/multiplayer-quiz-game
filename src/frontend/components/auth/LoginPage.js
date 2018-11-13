@@ -32,7 +32,7 @@ class LoginPage extends React.Component {
     }
 
     login() {
-        if (this.props.authenticated) {
+        if (this.props.authenticated && this.props.history != null) {
             this.props.history.push('/');
         }
         this.props.signIn(this.state.userId, this.state.password, this.props.history);
@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
 
     render() {
         let error;
-        if (this.props.error !== null) {
+        if (this.props.error != null) {
             error = <div><p>{this.props.error}</p></div>
         }
 

@@ -20,7 +20,7 @@ const user = localStorage.getItem('user');
 // Inspired by https://stackoverflow.com/a/48299733
 if (user) {
     store.dispatch({type: AUTHENTICATED, data: {userId: user}});
-    axios.get('/api/user').catch(() => {
+    axios.get('/api/auth/user').catch(() => {
         store.dispatch(logOut());
     });
 }

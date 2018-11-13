@@ -15,18 +15,18 @@ const start = (server) => {
         WebSocket login taken from https://github.com/arcuri82/pg6300/blob/master/les11/connect4-v2/src/server/ws/ws_handler.js
          */
         socket.on('login', (data) => {
-           if (data === null || data === undefined) {
+           if (data == null) {
                socket.emit('error', {error: 'No payload received!'});
                return;
            }
            const token = data.wstoken;
-           if (token === null || token === undefined) {
+           if (token == null) {
                socket.emit('error', {error: 'Missing token!'});
                return;
            }
 
            const userId = Tokens.consumeToken(token);
-           if (userId === null || userId === undefined) {
+           if (userId == null) {
                socket.emit('error', {error: 'Invalid token.'});
                return;
            }

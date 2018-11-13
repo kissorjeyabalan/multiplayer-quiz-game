@@ -27,7 +27,7 @@ class RegisterPage extends React.Component {
     }
 
     signUp() {
-        if (this.props.authenticated && this.props.history !== undefined) {
+        if (this.props.authenticated && this.props.history != null) {
             this.props.history.push('/');
         }
         this.props.signUp(this.state.userId, this.state.password, this.props.history);
@@ -35,7 +35,7 @@ class RegisterPage extends React.Component {
 
     render() {
         let error;
-        if (this.props.error !== null) {
+        if (this.props.error != null) {
             error = <div><p>{this.props.error}</p></div>
         }
 

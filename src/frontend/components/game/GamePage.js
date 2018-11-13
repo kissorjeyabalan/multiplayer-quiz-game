@@ -51,7 +51,7 @@ class GamePage extends React.Component {
 
     doLoginWebSocket() {
         // Taken from pg6300 repo
-        const url = '/api/wstoken';
+        const url = '/api/auth/wstoken';
         axios.post(url).then(res => {
             this.socket.emit('login', res.data);
         }).catch(err => {
